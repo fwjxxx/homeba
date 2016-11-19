@@ -168,7 +168,7 @@ $(function() {
                     // console.log(data.responseText)
                     var obj = $.parseJSON(data.responseText);
                     for (name in obj) {
-                        console.log(name)
+                        // console.log(name)
                         $("#form-info").find("input[type='text']").each(function(i) {
                             if ($("#form-info").find("input[type='text']").eq(i).attr("name") == name || $("#form-info").find("input[type='text']").eq(i).attr("name") == name + '1') {
                                 for (var k = 0; k < obj[name].length; k++) {
@@ -183,7 +183,7 @@ $(function() {
             }
             $(this).ajaxSubmit(options);
         } else {
-            console.log(id)
+            // console.log(id)
             var options1 = {
                 beforeSubmit: addresssub,
                 url: "/api/address/" + id + "/",
@@ -210,7 +210,7 @@ $(function() {
                     });
 
                     var address = data.address;
-                    console.log('address:' + address)
+                    // console.log('address:' + address)
                     var arr = address.split("\n");
                     if (arr[1] == undefined) {
                         arr[1] = '';

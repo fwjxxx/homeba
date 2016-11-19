@@ -26,7 +26,7 @@ $(function() {
             return false;
         } else if ($('#password1').val() != $('#password2').val()) {
             $('.homeba-reg span').eq(2).text("Sorry, the passwords don't match")
-            console.log('111')
+                // console.log('111')
             return false;
         } else if (!regemail.test($('#username').val())) {
             $('.homeba-reg span').eq(0).text('please enter your vaild email')
