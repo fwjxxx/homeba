@@ -15,7 +15,7 @@ $(function() {
                 $.each(json, function(i, item) {
                     $.each(item.items, function(j, val) {
                         // console.log(val)
-                        cartlist += '<li><dl class="clear"><dt><input type="hidden" name="item" value="' + val.id + '"><a href="/goods/' + val.goods.brow + '.html"><img src="' + val.goods.picture.phone + '"></a></dt><dd><h4><a href="{/goods/' + val.goods.brow + '.html">' + val.goods.title + '</a></h4><p><span>X' + val.qty + '</span><strong>$ ' + val.goods.price + '</strong><input type="hidden" name="qty_' + val.id + '" value="{{ ci.qty }}"></p></dd></dl></li>';
+                        cartlist += '<li><dl class="clear"><dt><input type="hidden" name="item" value="' + val.id + '"><a href="/goods/' + val.goods.brow + '.html"><img src="' + val.goods.picture.phone + '"></a></dt><dd><h4><a href="{/goods/' + val.goods.brow + '.html">' + val.goods.title + '</a></h4><p><span>X' + val.qty + '</span><strong>$ ' + val.goods.amount + '</strong><input type="hidden" name="qty_' + val.id + '" value="{{ ci.qty }}"></p></dd></dl></li>';
                     });
                 });
                 $('.menu-cart').html(cartlist);
@@ -50,9 +50,18 @@ $(function() {
                 qty: qty,
                 goods: id
             },
+            beforeSubmit: function() {
+                //让提交按钮失效，以实现防止按钮重复点击
+                $('#addcart').attr('disabled', 'disabled');
+            },
+            complete: function() {
+                //让按钮重新有效
+                $('#addcart').removeAttr('disabled');
+            },
             success: function(json) {
                 $('#dropcart1 b').show();
-                $('#dropcart1 b').html(json.item_count);
+                // console.log(json.item_count)
+                $('#dropcart1 b').text(json.item_count);
                 cartnew();
                 $('#icon-top').show();
                 // console.log(qty+'++++'+id+'++++'+gasku+'++++'+gaprice)
@@ -99,13 +108,41 @@ $(function() {
                 }
                 // console.log(goodsnum)
                 goodsid = parseInt($(this).attr('name'));
-                // console.log(gasku+'++++'+gaprice)
+                // console.log(qtynumber + ',' + goodsid + ',' + gasku + ',' + gaprice + ',' + ganame + ',' + gacategory + ',' + gaposition + ',' + galist)
+                // if (navigator.userAgent.indexOf("neutron") >= 0) {
+                //     window.location = 'HomeBA://action=addtocart?id=' + goodsid + '';
+                // } else {
                 addcart(qtynumber, goodsid, gasku, gaprice, ganame, gacategory, gaposition, galist);
+                // }
             });
         } else {
             return false;
         }
     });
+    if ($("#addbuylist").length > 0) {
+        $("#addbuylist #addbuy").each(function(i) {
+            $(this).on('click', function() {
+                // console.log($(this).parent().parent().parent().parent().find('#goods-ga').attr('data-sku'))
+                var gasku = $(this).parent().parent().parent().parent().find('#goods-ga').attr('data-sku');
+                var ganame = $(this).parent().parent().parent().parent().find('#goods-ga').attr('data-name');
+                var gacategory = $(this).parent().parent().parent().parent().find('#goods-ga').attr('data-category');
+                var gaposition = $(this).parent().parent().parent().parent().find('#goods-ga').attr('data-position');
+                var galist = $(this).parent().parent().parent().parent().find('#goods-ga').attr('data-list');
+                var gaprice = $(this).parent().parent().parent().parent().find('#goods-ga').attr('data-price');
+                goodsnum = $('#goodsnum').val();
+                // console.log(goodsnum);
+                if (goodsnum == '' || goodsnum == undefined) {
+                    qtynumber = 1;
+                } else {
+                    qtynumber = parseInt(goodsnum);
+                }
+                // console.log(goodsnum)
+                goodsid = parseInt($(this).attr('name'));
+                console.log(qtynumber + ',' + goodsid + ',' + gasku + ',' + gaprice + ',' + ganame + ',' + gacategory + ',' + gaposition + ',' + galist)
+                addcart(qtynumber, goodsid, gasku, gaprice, ganame, gacategory, gaposition, galist);
+            });
+        });
+    }
     $("#addcartlist #goods-ga").each(function(i) {
         $(this).on('click', function(event) {
             event.preventDefault();
@@ -175,13 +212,22 @@ $(function() {
             var gasku = $(this).attr('data-sku');
             var gaprice = $(this).attr('data-price');
             // console.log(gasku+'++++'+gaprice)
-            addcart(qtynumber, goodsid, gasku, gaprice, ganame, gacategory, gaposition, galist);
+            if (navigator.userAgent.indexOf("neutron") >= 0) {
+                // alert(1)
+                window.location = 'HomeBA://action=addtocart?id=' + goodsid + '';
+            } else {
+                // alert(2)
+                addcart(qtynumber, goodsid, gasku, gaprice, ganame, gacategory, gaposition, galist);
+            }
         });
     });
     $('#but-keytobuy').on('click', function() {
         var brands = '';
         var goodscount = 1;
-        $("#keytobuy .swiper-slide input[name='keytobuy_cart']").each(function() {
+        var goodsid = "";
+        var a = 0;
+        var j = $("#keytobuy .swiper-slide").length - 1;
+        $("#keytobuy .swiper-slide input[name='keytobuy_cart']").each(function(i) {
             var gasku = $(this).parent().find('#goods-ga').attr('data-sku');
             var gaprice = $(this).parent().find('#goods-ga').attr('data-price');
             var ganame = $(this).parent().find('#goods-ga').attr('data-name');
@@ -189,8 +235,67 @@ $(function() {
             var gaposition = $(this).parent().find('#goods-ga').attr('data-position');
             var galist = $(this).parent().find('#goods-ga').attr('data-list');
             // console.log(gasku+'++++'+gaprice)
-            brands = $(this).val();
-            addcart(goodscount, brands, gasku, gaprice, ganame, gacategory, gaposition, galist);
+            a = i + 1;
+            goodsid = $(this).val();
+
+            if (a == j) {
+                brands = brands + goodsid;
+            } else {
+                brands = brands + goodsid + ','
+            }
+            // console.log(a + '==' + j)
+            addga(gasku, gaprice, ganame, gacategory, gaposition, galist);
         });
+        // console.log(brands)
+        addBuyAllCart(goodscount, brands);
     });
+
+    function addga(gasku, gaprice, ganame, gacategory, gaposition, galist) {
+        fbq('track', 'AddToCart', {
+            content_ids: gasku,
+            content_type: 'product',
+            value: gaprice,
+            currency: 'USD'
+        });
+        ga('ec:addProduct', {
+            'id': gasku,
+            'name': ganame,
+            'category': gacategory,
+            'price': gaprice,
+            'quantity': 1,
+        });
+        ga('ec:setAction', 'add');
+        ga('send', 'event', 'UX', 'click', 'add to cart');
+    }
+
+    function addBuyAllCart(qty, id) {
+        $.ajax({
+            type: 'post',
+            url: '/api/cartitem/',
+            data: {
+                qty: qty,
+                goods: id
+            },
+            beforeSubmit: function() {
+                //让提交按钮失效，以实现防止按钮重复点击
+                $('#addcart').attr('disabled', 'disabled');
+            },
+            complete: function() {
+                //让按钮重新有效
+                $('#addcart').removeAttr('disabled');
+            },
+            success: function(json) {
+                $('#dropcart1 b').show();
+                // console.log(json.item_count)
+                $('#dropcart1 b').text(json.item_count);
+                cartnew();
+                $('#icon-top').show();
+                setTimeout(function() {
+                    $('.cartlist-out').fadeOut(300);
+                    $('#icon-top').hide();
+                }, 5000);
+            },
+            error: function() {}
+        });
+    }
 });
