@@ -214,7 +214,8 @@ $(function() {
             // console.log(gasku+'++++'+gaprice)
             if (navigator.userAgent.indexOf("neutron") >= 0) {
                 // alert(1)
-                window.location = 'HomeBA://action=addtocart?id=' + goodsid + '';
+                window.location = 'HomeBA://action=addtoCart?id=' + goodsid + '';
+                // self.location = 'HomeBA://action=goodsDetail?id=' + goodsid + '';
             } else {
                 // alert(2)
                 addcart(qtynumber, goodsid, gasku, gaprice, ganame, gacategory, gaposition, galist);

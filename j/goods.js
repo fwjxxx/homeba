@@ -4,14 +4,6 @@ $(function() {
     var add = 0;
     var goodsnum = parseInt($('#goodsnum').val());
 
-    if (navigator.userAgent.indexOf("neutron") >= 0) {
-        // alert(1)
-        $('#homeba-nav').hide();
-        $('.container-top').hide();
-        $('.body-newsletter').hide();
-        $('.main-footer').hide();
-    }
-
     $("input[name='goodsnum']").keyup(function() {
         var tmptxt = $(this).val();
         $(this).val(tmptxt.replace(/\D|^0/g, ''));
