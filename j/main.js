@@ -3,15 +3,6 @@ $('docuemnt').ready(function() {
     var history = [];
     var historytext = '';
 
-    if (navigator.userAgent.indexOf("neutron") >= 0) {
-        // alert(1)
-        $('#homeba-nav').hide();
-        $('.container-top').css('padding', '0px');
-        $('.breadcrumb').hide();
-        $('.body-newsletter').hide();
-        $('.main-footer').hide();
-    }
-
     function search_hot() {
         $('.shop-search input').click(function() {
             $('.hot-search').css('display', 'block');
