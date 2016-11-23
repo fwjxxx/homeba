@@ -1,4 +1,8 @@
 $(function() {
+    var id = 0;
+    var taddress = "";
+    var taddress2 = "";
+    var allvalue = $("#form-info").find("input[type='text']");
 
     specialgift();
 
@@ -27,47 +31,49 @@ $(function() {
         });
     }
 
-    // $('#reviewedit').on('click', function() {
-    //     // alert(1)
-    //     $('.shop-info-text').addClass('hidden');
-    //     $('#form-info').removeClass('hidden');
-    //     reviewEdit()
-    // })
+    function reviewEdit() {
+        var firstname = $(".firstname").text();
+        var lastname = $(".lastname").text();
+        var address1 = $(".address").text();
+        var address2 = $(".address2").text();
+        var city = $(".city").text();
+        var province = $(".province").text();
+        var postcode = $(".postcode").text();
+        var country = $(".country").text();
+        var mobile = $(".mobile").text();
+        var email = $(".shop-info-text .email").text();
+        // console.log(email)
+        $("#form-info input[name='firstname']").val(firstname);
+        $("#form-info input[name='lastname']").val(lastname);
+        $("#form-info input[name='city']").val(city);
+        $("#form-info input[name='province']").val(province);
+        $("#form-info input[name='postcode']").val(postcode);
+        $("#form-info input[name='mobile']").val(mobile);
+        $("#form-info input[name='email']").val(email);
+        // console.log($("#form-info input[name='email']").val())
+        // alert(address1 + '\n' + address2)
+        $('#country span').text(country);
+        $('#country-list li a').each(function(i) {
+            if ($(this).text() == $.trim(country)) {
+                var dd = $(this).attr('value');
+                $("#form-info input[name='country']").val(dd);
+            }
+        });
+        taddress = address1;
+        taddress2 = address2;
+        $("#form-info input[name='address1']").val(address1);
+        $("#form-info input[name='address2']").val(address2);
+        $("#form-info input[name='address']").val(address1 + '\n' + address2);
+    }
 
-    // function reviewEdit() {
-    //     var firstname = $("#firstname").text();
-    //     var lastname = $("#lastname").text();
-    //     var address1 = $("#address").text();
-    //     var address2 = $("#address2").text();
-    //     var city = $("#city").text();
-    //     var province = $("#province").text();
-    //     var postcode = $("#postcode").text();
-    //     var country = $("#country").text();
-    //     var mobile = $("#mobile").text();
-    //     var email = $("#email").text();
-    //     $("#form-info input[name='firstname']").val(firstname);
-    //     $("#form-info input[name='lastname']").val(lastname);
-    //     $("#form-info input[name='city']").val(city);
-    //     $("#form-info input[name='province']").val(province);
-    //     $("#form-info input[name='postcode']").val(postcode);
-    //     $("#form-info input[name='mobile']").val(mobile);
-    //     $("#form-info input[name='email']").val(email);
-
-    //     $('#country span').text(country);
-    //     $("#form-info input[name='address1']").val(address1);
-    //     $("#form-info input[name='address2']").val(address2);
-    //     $("#form-info input[name='address']").val(address1 + '\n' + address2);
-    // }
-
-    var address = $("#address").attr('value');
+    var address = $(".address").attr('value');
     var arr = address.split("\n");
-    $("#address").text(arr[0]);
-    $("#address2").text(arr[1]);
+    $(".address").text(arr[0]);
+    $(".address2").text(arr[1]);
 
     var sum = $('.ordersummary .row-line').length;
     var num = 3;
     var countryList = '';
-    var allvalue = $("#form-info").find("input[type='text']");
     var shoptext = '<button type="submit" id="ordercheck1" class="btn btn-orange btn-lg btn-block">Place Order</button>';
     // console.log(sum)
     if (sum > num) {
@@ -92,52 +98,141 @@ $(function() {
             $('#orderSummary').submit();
         })
     }
-    var options = {
-        beforeSubmit: addresssub,
-        dataType: "json",
-        complete: function() {
-            //让登陆按钮重新有效
-            $('#reviewcheck').removeAttr('disabled');
-        },
-        success: function(data) {
-            var str = null;
-            var country = '';
 
-            $("#form-info").hide();
+    $('body').on('click', '#reviewedit', function() {
+        $('.shop-info-text').addClass('hidden');
+        $('#form-info').removeClass('hidden');
+        $('#ordercheck').attr('disabled', 'disabled');
+        $('.placeorder').html("");
+        // $('#form-info').css('display', 'block');
+        id = $(this).attr('name')
+        reviewEdit()
+    })
 
-            $("#country-list li a").each(function() {
-                if ($(this).attr('value') == data.country) {
-                    country = $(this).text()
-                }
-            })
-            var address = data.address;
-            var arr = address.split("\n");
+    // alert(addressid)
+    $('#form-info').submit(function() {
+        if (id == 0) {
+            // alert(id)
+            var options = {
+                beforeSubmit: addresssub,
+                type: 'POST',
+                dataType: "json",
+                complete: function() {
+                    //让登陆按钮重新有效
+                    $('#reviewcheck').removeAttr('disabled');
+                },
+                success: function(data) {
+                    var str = null;
+                    var edit = null;
+                    var country = '';
 
-            str = '<div class="row review-info"><div class="col-xs-10 clear"><i></i><span>Shipping Information</span></div><div class="col-xs-2"><span>Edit</span></div></div><div class="col-sm-12 shop-info-text"><div class="form-group margin-lr"><span id="">' + data.firstname + '</span><span>' + data.lastname + '</span></div><div class="form-group margin-lr"><span id="address" value="' + data.address + '">' + arr[0] + '</span></div><div class="form-group margin-lr"><span id="address2">' + arr[1] + '</span></div><div class="form-group margin-lr"><span>' + data.city + ',' + data.province + ' ' + data.postcode + '</span></div><div class="form-group margin-lr"><span>' + country + '</span></div><div class="form-group margin-lr"><span>' + data.mobile + '</span></div><div class="form-group margin-lr"><span>' + data.email + '</span></div></div>';
-            $(".shop-info").html(str);
-            $("#orderSummary input[name='address']").val(data.id);
-            $("#orderSummary input[name='bill_address']").val(data.id);
-            $('#ordercheck').removeAttr("disabled");
-            $('.placeorder').html(shoptext);
+                    // $("#form-info").hide();
 
-        },
-        error: function(data) {
-            // console.log(data.responseText)
-            var obj = $.parseJSON(data.responseText);
-            for (name in obj) {
-                // console.log(name)
-                $("#form-info").find("input[type='text']").each(function(i) {
-                    if ($("#form-info").find("input[type='text']").eq(i).attr("name") == name || $("#form-info").find("input[type='text']").eq(i).attr("name") == name + '1') {
-                        for (var k = 0; k < obj[name].length; k++) {
-                            $(this).next().show();
-                            $(this).next().text(obj[name][k])
+                    $("#country-list li a").each(function() {
+                        if ($(this).attr('value') == data.country) {
+                            country = $(this).text()
                         }
+                    })
+                    var address = data.address;
+                    console.log(address)
+                    var arr = address.split("\n");
+                    if (arr[1] == undefined) {
+                        arr[1] = '';
                     }
-                });
-            }
 
+                    edit = '<div class="row review-info"><div class="col-xs-10 clear"><i></i><span>Shipping Information</span></div><div class="col-xs-2"><span id="reviewedit" name="' + data.id + '">Edit</span></div></div>';
+
+                    str = '<div class="form-group margin-lr"><span class="firstname">' + data.firstname + '</span> <span class="lastname">' + data.lastname + '</span></div><div class="form-group margin-lr"><span class="address" value="' + data.address + '">' + arr[0] + '</span></div><div class="form-group margin-lr"><span class="address2">' + arr[1] + '</span></div><div class="form-group margin-lr"><span class="city">' + data.city + '</span>, <span class="province">' + data.province + '</span> <span class="postcode">' + data.postcode + '</span></div><div class="form-group margin-lr"><span class="country">' + country + '</span></div><div class="form-group margin-lr"><span class="mobile">' + data.mobile + '</span></div><div class="form-group margin-lr"><span class="email">' + data.email + '</span></div>';
+
+                    $(".reviewedit").html(edit);
+                    $(".shop-info-text").html(str);
+                    $("#orderSummary input[name='address']").val(data.id);
+                    $("#orderSummary input[name='bill_address']").val(data.id);
+                    $('#ordercheck').removeAttr("disabled");
+                    $('.placeorder').html(shoptext);
+                    $('.shop-info-text').removeClass('hidden');
+                    $('#form-info').addClass('hidden');
+
+                },
+                error: function(data) {
+                    // console.log(data.responseText)
+                    var obj = $.parseJSON(data.responseText);
+                    for (name in obj) {
+                        // console.log(name)
+                        $("#form-info").find("input[type='text']").each(function(i) {
+                            if ($("#form-info").find("input[type='text']").eq(i).attr("name") == name || $("#form-info").find("input[type='text']").eq(i).attr("name") == name + '1') {
+                                for (var k = 0; k < obj[name].length; k++) {
+                                    $(this).next().show();
+                                    $(this).next().text(obj[name][k])
+                                }
+                            }
+                        });
+                    }
+
+                }
+            }
+            $(this).ajaxSubmit(options);
+        } else {
+            // alert(id)
+            var options1 = {
+                beforeSubmit: addresssub,
+                url: "/api/address/" + id + "/",
+                type: 'PATCH',
+                dataType: "json",
+                complete: function() {
+                    //让登陆按钮重新有效
+                    $('#reviewcheck').removeAttr('disabled');
+                },
+                success: function(data) {
+                    var str = null;
+                    var country = '';
+
+                    $("#country-list li a").each(function() {
+                        if ($(this).attr('value') == data.country) {
+                            country = $(this).text()
+                        }
+                    })
+                    var address = data.address;
+                    var arr = address.split("\n");
+                    if (arr[1] == undefined) {
+                        arr[1] = '';
+                    }
+
+                    edit = '<div class="row review-info"><div class="col-xs-10 clear"><i></i><span>Shipping Information</span></div><div class="col-xs-2"><span id="reviewedit" name="' + data.id + '">Edit</span></div></div>';
+
+                    str = '<div class="form-group margin-lr"><span class="firstname">' + data.firstname + '</span> <span class="lastname">' + data.lastname + '</span></div><div class="form-group margin-lr"><span class="address" value="' + data.address + '">' + arr[0] + '</span></div><div class="form-group margin-lr"><span class="address2">' + arr[1] + '</span></div><div class="form-group margin-lr"><span class="city">' + data.city + '</span>, <span class="province">' + data.province + '</span> <span class="postcode">' + data.postcode + '</span></div><div class="form-group margin-lr"><span class="country">' + country + '</span></div><div class="form-group margin-lr"><span class="mobile">' + data.mobile + '</span></div><div class="form-group margin-lr"><span class="email">' + data.email + '</span></div>';
+
+                    $(".reviewedit").html(edit);
+                    $(".shop-info-text").html(str);
+                    $("#orderSummary input[name='address']").val(data.id);
+                    $("#orderSummary input[name='bill_address']").val(data.id);
+                    $('#ordercheck').removeAttr("disabled");
+                    $('.placeorder').html(shoptext);
+                    $('.shop-info-text').removeClass('hidden');
+                    $('#form-info').addClass('hidden');
+
+                },
+                error: function(data) {
+                    // console.log(data.responseText)
+                    var obj = $.parseJSON(data.responseText);
+                    for (name in obj) {
+                        // console.log(name)
+                        $("#form-info").find("input[type='text']").each(function(i) {
+                            if ($("#form-info").find("input[type='text']").eq(i).attr("name") == name || $("#form-info").find("input[type='text']").eq(i).attr("name") == name + '1') {
+                                for (var k = 0; k < obj[name].length; k++) {
+                                    $(this).next().show();
+                                    $(this).next().text(obj[name][k])
+                                }
+                            }
+                        });
+                    }
+
+                }
+            }
+            $(this).ajaxSubmit(options1);
         }
-    }
+        return false;
+    });
 
     var options2 = {
         dataType: "json",
@@ -155,15 +250,10 @@ $(function() {
         error: function(data) {
             var obj = $.parseJSON(data.responseText);
 
-            alert(obj.detail)
+            // alert(obj.detail)
         }
 
     }
-
-    $('#form-info').submit(function() {
-        $(this).ajaxSubmit(options);
-        return false;
-    });
 
     $('#orderSummary').ajaxForm(options2);
 
@@ -180,17 +270,15 @@ $(function() {
 
     $("#form-info").parent().find("strong").hide()
 
-    var address = "";
-    var address2 = "";
     $("input[name='address1']").blur(function() {
-        address = $(this).val();
-        $("#form-info input[name='address']").val(address + '\n' + address2);
+        taddress = $(this).val();
+        $("#form-info input[name='address']").val(taddress + '\n' + taddress2);
     });
     $("input[name='address2']").blur(function() {
-        address2 = $(this).val();
-        $("#form-info input[name='address']").val(address + '\n' + address2);
+        taddress2 = $(this).val();
+        $("#form-info input[name='address']").val(taddress + '\n' + taddress2);
     });
-    $("#form-info input[name='address']").val(address);
+    $("#form-info input[name='address']").val(taddress + '\n' + taddress2);
 
 
     function addresssub() {
@@ -224,13 +312,16 @@ $(function() {
     }
 
     $("#form-info").find("input[type='text']").each(function(i) {
+        // console.log($('#firstname').val() + '----' + $('#lastname').val())
         $(this).keyup(function() {
+            // console.log($(this).parent().parent().find("input").val())
+            // console.log($('#firstname').val() + '----' + $('#lastname').val())
             if ($(this).parent().parent().find("input").length == 2) {
                 if ($(this).parent().parent().hasClass("one")) {
                     if ($.trim($('#firstname').val()) != "" && $.trim($('#lastname').val()) != "") {
-                        $("#form-info").parent().find("strong").eq(0).hide()
+                        $("#form-info").parent().find("strong").eq(0).hide();
                     } else {
-                        $("#form-info").parent().find("strong").eq(0).show()
+                        $("#form-info").parent().find("strong").eq(0).show();
                     }
                 } else if ($(this).parent().parent().hasClass("four")) {
                     if ($.trim($('#city').val()) != "" && $.trim($('#state').val()) != "") {

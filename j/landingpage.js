@@ -15,29 +15,29 @@ $(function() {
         $('.landingpage-navlist').hide();
     }
 
-    $("#landingpage-list #goods-ga").each(function(i) {
-        $(this).on('click', function(event) {
-            goodsid = $(this).attr('name');
-            dataurl = $(this).attr('data-url');
-            // console.log(goodsid)
-            if (navigator.userAgent.indexOf("neutron") >= 0) {
-                self.location = 'HomeBA://action=goodsDetail?id=' + goodsid + '';
-            } else {
-                window.open(dataurl);
-            }
-        })
-    })
+    // $("#landingpage-list #goods-ga").each(function(i) {
+    //     $(this).on('click', function(event) {
+    //         goodsid = $(this).attr('name');
+    //         dataurl = $(this).attr('data-url');
+    //         // console.log(goodsid)
+    //         if (navigator.userAgent.indexOf("neutron") >= 0) {
+    //             self.location = 'HomeBA://action=goodsDetail?id=' + goodsid + '';
+    //         } else {
+    //             window.open(dataurl);
+    //         }
+    //     })
+    // })
 
-    $("#landingpage-list #goods-gb").each(function(i) {
-        $(this).on('click', function(event) {
-            gbsid = $(this).attr('name');
-            dburl = $(this).attr('data-url');
-            // console.log(gbsid)
-            if (navigator.userAgent.indexOf("neutron") >= 0) {
-                self.location = 'HomeBA://action=goodsDetail?id=' + gbsid + '';
-            } else {
-                window.open(dburl);
-            }
-        })
-    })
+    // $("#landingpage-list #goods-gb").each(function(i) {
+    //     $(this).on('click', function(event) {
+    //         gbsid = $(this).attr('name');
+    //         dburl = $(this).attr('data-url');
+    //         // console.log(gbsid)
+    //         if (navigator.userAgent.indexOf("neutron") >= 0) {
+    //             self.location = 'HomeBA://action=goodsDetail?id=' + gbsid + '';
+    //         } else {
+    //             window.open(dburl);
+    //         }
+    //     })
+    // })
 })
