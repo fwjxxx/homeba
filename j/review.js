@@ -94,7 +94,7 @@ $(function() {
     }
     if (!$('.shop-info-text').hasClass("hidden")) {
         $('.placeorder').html(shoptext);
-        $('#ordercheck1').on('click', function() {
+        $('body').on('click', '#ordercheck1', function() {
             $('#orderSummary').submit();
         })
     }
@@ -104,7 +104,8 @@ $(function() {
         $('#form-info').removeClass('hidden');
         $('#ordercheck').attr('disabled', 'disabled');
         $('.placeorder').html("");
-        // $('#form-info').css('display', 'block');
+        $(".reviewedit").html('')
+            // $('#form-info').css('display', 'block');
         id = $(this).attr('name')
         reviewEdit()
     })
@@ -140,7 +141,7 @@ $(function() {
                         arr[1] = '';
                     }
 
-                    edit = '<div class="row review-info"><div class="col-xs-10 clear"><i></i><span>Shipping Information</span></div><div class="col-xs-2"><span id="reviewedit" name="' + data.id + '">Edit</span></div></div>';
+                    edit = '<span id="reviewedit" name="' + data.id + '">Edit</span>';
 
                     str = '<div class="form-group margin-lr"><span class="firstname">' + data.firstname + '</span> <span class="lastname">' + data.lastname + '</span></div><div class="form-group margin-lr"><span class="address" value="' + data.address + '">' + arr[0] + '</span></div><div class="form-group margin-lr"><span class="address2">' + arr[1] + '</span></div><div class="form-group margin-lr"><span class="city">' + data.city + '</span>, <span class="province">' + data.province + '</span> <span class="postcode">' + data.postcode + '</span></div><div class="form-group margin-lr"><span class="country">' + country + '</span></div><div class="form-group margin-lr"><span class="mobile">' + data.mobile + '</span></div><div class="form-group margin-lr"><span class="email">' + data.email + '</span></div>';
 
@@ -198,7 +199,7 @@ $(function() {
                         arr[1] = '';
                     }
 
-                    edit = '<div class="row review-info"><div class="col-xs-10 clear"><i></i><span>Shipping Information</span></div><div class="col-xs-2"><span id="reviewedit" name="' + data.id + '">Edit</span></div></div>';
+                    edit = '<span id="reviewedit" name="' + data.id + '">Edit</span>';
 
                     str = '<div class="form-group margin-lr"><span class="firstname">' + data.firstname + '</span> <span class="lastname">' + data.lastname + '</span></div><div class="form-group margin-lr"><span class="address" value="' + data.address + '">' + arr[0] + '</span></div><div class="form-group margin-lr"><span class="address2">' + arr[1] + '</span></div><div class="form-group margin-lr"><span class="city">' + data.city + '</span>, <span class="province">' + data.province + '</span> <span class="postcode">' + data.postcode + '</span></div><div class="form-group margin-lr"><span class="country">' + country + '</span></div><div class="form-group margin-lr"><span class="mobile">' + data.mobile + '</span></div><div class="form-group margin-lr"><span class="email">' + data.email + '</span></div>';
 

@@ -4593,10 +4593,14 @@ header {
 		.promotion-code {
 			margin-top: 20px;
 			.form-control {
+				box-shadow: none;
 				display: inline-block;
 				border-radius: 0px;
 				width: 60%;
 				height: 40px;
+			}
+			input:focus {
+				border: 1px solid @orange;
 			}
 			button {
 				margin-left: 20px;
@@ -4750,7 +4754,7 @@ header {
 				display: block;
 				float: left;
 				margin-left: 10px;
-				.font-style(@Helvetica,2rem,@orange);
+				.font-style(@Helvetica,1.6rem,@orange);
 				font-weight: lighter;
 				cursor: pointer;
 			}
@@ -4792,6 +4796,11 @@ header {
 		font-weight: lighter;
 		border-radius: 0px;
 	}
+
+	input:focus {
+		border: 1px solid @orange;
+	}
+	
 	.form-back {
 		background: @white;
 	}
@@ -5104,7 +5113,7 @@ header {
 .shop-info-text {
 	background: @fa;
 	border: 1px solid @d9;
-	padding-top: 10px;
+	padding-top: 20px;
 	
 	span {
 		.font-style(@Helvetica,1.8rem,@font-main);
@@ -5424,10 +5433,16 @@ header {
 				padding-bottom: 10px;
 			}
 			.form-control {
+				border-radius: 0px;
+				box-shadow: none;
+				background: @fa;
 				height: 40px;
-				border: 0;
+				border: 1px solid @d9;
 				.font-style(@Helvetica,1.4rem,@font-main);
 				font-weight: lighter;
+			}
+			input:focus {
+				border: 1px solid @orange;
 			}
 		}
 
